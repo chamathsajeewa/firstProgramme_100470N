@@ -1,0 +1,90 @@
+
+
+package github;
+
+class Bicycle
+{
+    private int cadence;
+    private int speed;
+
+    public Bicycle(int cadence, int speed) {
+        this.cadence = cadence;
+        this.speed = speed;
+    }
+
+
+    public void setCadence(int cadence) {
+        this.cadence = cadence;
+    }
+
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public int getCadence() {
+        return cadence;
+    }
+
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void showStatus()
+    {
+        System.out.println("cadence="+cadence);
+        System.out.println("speed="+speed);
+    }
+}
+
+class RacingBicycle extends Bicycle
+{
+    private int gear;
+
+    public RacingBicycle(int cadence,int speed,int gear) {
+        super(cadence,speed);
+        this.gear = gear;
+    }
+
+    public void setGear(int gear) {
+        this.gear = gear;
+    }
+
+    public int getGear() {
+        return gear;
+    }
+
+}
+
+class MountainBicycle extends Bicycle
+{
+    private int seatHeight;
+
+    public MountainBicycle(int cadence,int speed,int seatHeight) {
+        super(cadence,speed);
+        this.seatHeight = seatHeight;
+    }
+
+    public void setSeatHeight(int seatHeight) {
+        this.seatHeight = seatHeight;
+    }
+
+    public int getSeatHeight() {
+        return seatHeight;
+    }
+
+}
+
+public class Main {
+
+    
+    public static void main(String[] args) {
+
+       RacingBicycle racingBicycle =new RacingBicycle(10,35,15);
+       MountainBicycle mountainBicycle=new MountainBicycle(8,45,2);
+       racingBicycle.showStatus();
+       mountainBicycle.showStatus();
+    }
+
+}
