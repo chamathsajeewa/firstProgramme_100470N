@@ -1,0 +1,251 @@
+
+
+package javaapplication51;
+
+
+
+
+import java.util.LinkedList;
+import java.util.List;
+
+class iTag///////////////////////////////////////////////////////
+{
+    private int itemNum;
+   private int price;
+
+
+    iTag(int itemNum,int price)
+    {
+      this.itemNum=itemNum;
+        this.price=price;
+    }
+    int showItemNum()
+    {
+        return itemNum;
+    }
+    int showPrice()
+    {
+        return price;
+    }
+ }
+
+class customer //////////////////////////////////////////////////
+{
+   private String name;
+   private String telNum;
+   private String purchaseDate;
+
+customer(String name,String telNum,String purchaseDate)
+    {
+        //dataBase DB1=new dataBase();
+        this.name=name;
+       this.telNum=telNum;
+       this.purchaseDate=purchaseDate;
+     }
+   String showName()
+    {
+       return name;
+    }
+   String showTelNum()
+    {
+       return telNum;
+    }
+   String showPurchaseDate()
+    {
+       return purchaseDate;
+    }
+}
+
+class reader//////////////////////////////////////////////
+{
+    static dataBase DB=new dataBase();
+   int activateItag(iTag itag) // all readers will activate the itag and read itemnumber
+    {
+       int itemNum=itag.showItemNum();
+       return itemNum;
+    }
+}
+class CounterReader extends reader//////////////////////////////////////
+{
+    int NumOfCustomers=0;
+
+    void createRecipt(iTag itag,customer cus)
+    {
+        System.out.println("---------RECIPT--------");
+        System.out.println("customer name-"+cus.showName());
+        System.out.println("Purchase date-"+cus.showPurchaseDate());
+        System.out.println("Item num-"+activateItag(itag));
+        System.out.println("Price-"+itag.showPrice());
+        
+        DB.StoreCustomerDet(cus.showName(),activateItag(itag),cus.showTelNum(),NumOfCustomers);//automatically store the details of customers
+        NumOfCustomers++;
+    }
+
+      
+}
+
+class WmReader extends reader////////////////////////////////////////
+{
+    void setInstrution(iTag itag)
+    {
+        int itemNum=activateItag(itag);//read itemnumber from itag
+        DB.showWmInstructions(itemNum);// send to data base to get appropriate insructions
+
+    }
+}
+
+class IronReader extends reader///////////////////////////////////////
+{
+    void setInstrution(iTag itag)
+    {
+
+        int itemNum=activateItag(itag);//read itemnumber from itag
+        DB.showIronInstructions(itemNum);// send to data base to get appropriate insructions
+
+    }
+}
+
+class DoorWayReader extends reader////////////////////////////////////
+{
+     void sendMessage(iTag itag)// identify customer via item number
+    {
+
+        int itemNum=activateItag(itag);//read itemnumber from itag
+        DB.SMSdet(itemNum);// send to data base to get appropriate insructions
+
+    }
+}
+
+
+class dataBase//////////////////////////////////////////
+{
+
+    List customerName=new LinkedList();
+    List TelNum=new LinkedList();
+    List ItemNum=new LinkedList();
+
+    void StoreCustomerDet(String name,int itemNum,String telNum,int num)
+    {
+
+        customerName.add(num,name);
+        TelNum.add(num,telNum);
+        ItemNum.add(num,itemNum);
+
+    }
+
+void showWmInstructions(int itemNum)
+    {
+        System.out.println("----Washingmachine details");
+       switch(itemNum)
+        {
+           case 1:
+               System.out.println("Washing speed=10");
+               System.out.println("Washing temperature=30C");
+               System.out.println("Washing time=35s");
+               break;
+           case 2:
+               System.out.println("Washing speed=15");
+               System.out.println("Washing temperature=45C");
+               System.out.println("Washing time=15s");
+               break;
+           case 3:
+               System.out.println("Washing speed=95");
+               System.out.println("Washing temperature=10C");
+               System.out.println("Washing time=25s");
+               break;
+           case 4:
+               System.out.println("Washing speed=45");
+               System.out.println("Washing temperature=35C");
+               System.out.println("Washing time=55s");
+               break;
+        }
+    }
+    void showIronInstructions(int itemNum)
+    {
+         System.out.println("--------Iron details---------");
+       switch(itemNum)
+        {
+           case 1:
+               System.out.println("Iron mode=cotton");
+               System.out.println("Iron temperature=30C");
+               break;
+
+           case 2:
+               System.out.println("Iron mode=nylon");
+               System.out.println("Iron temperature=45c");
+               break;
+           case 3:
+              System.out.println("Iron mode=silk");
+              System.out.println("Iron temperature=15c");
+              break;
+           case 4:
+              System.out.println("Iron mode=wool");
+              System.out.println("Iron temperature=25c");
+              break;
+        }
+    }
+    void SMSdet(int itemNum) 
+    {
+
+        int index=ItemNum.indexOf(itemNum);
+       System.out.println("--------------message----------------");
+       
+       System.out.println("---SMS to"+TelNum.get(index));
+       System.out.println("Hello  "+customerName.get(index));
+       switch(itemNum)
+        {
+            case 1:
+                 System.out.println("you can buy  matching shoes with 5% discount");
+                 break;
+            case 2:
+                System.out.println("you can buy matching trouser with 10% discount");
+                break;
+            case 3:
+                System.out.println("You can buy matching shirt with 7.5% discount");
+                break;
+            case 4:
+                System.out.println("You can buy matching shirt with 7.5% discount");
+                break;
+
+        }
+
+    }
+}
+
+
+public class Main {
+
+
+    public static void main(String[] args)
+    {
+
+        CounterReader CR=new CounterReader();
+        DoorWayReader DR=new DoorWayReader();
+
+        WmReader WR=new WmReader();
+        IronReader IR=new IronReader();
+
+       customer c1=new customer("kamal","07765576","20080402");
+       iTag i3=new iTag(3,950);
+       CR.createRecipt(i3, c1);
+       WR.setInstrution(i3);
+       IR.setInstrution(i3);
+       DR.sendMessage(i3);
+
+
+       customer c2=new customer("nimal","673282329","20091212");
+       iTag i2=new iTag(2,650);
+       CR.createRecipt(i2, c2);
+       WR.setInstrution(i2);
+       IR.setInstrution(i2);
+       DR.sendMessage(i2);
+
+
+}
+
+}
+
+
+
+
+
